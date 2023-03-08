@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="cqwu",  # 用自己的名替换其中的YOUR_USERNAME_
-    version="0.0.2",  # 包版本号，便于维护版本
+    version="0.0.3",  # 包版本号，便于维护版本
     author="omg-xtao",  # 作者，可以写自己的姓名
     author_email="xtao@xtaolink.cn",  # 作者联系方式，可写自己的邮箱地址
     description="A cqwu ehall client.",  # 包的简述
@@ -20,12 +20,12 @@ setuptools.setup(
     ],
     python_requires='>=3.6',  # 对python的最低版本要求
     install_requires=[
-        "httpx==0.23.3",
-        "lxml==4.9.2",
-        "PyExecJS2==1.6.1",
-        "beautifulsoup4==4.11.2",
-        "qrcode==7.4.2",
+        "httpx",
+        "lxml",
+        "PyExecJS2",
+        "beautifulsoup4",
+        "qrcode",
         "pillow",
-        "pydantic==1.10.5",
+        "pydantic",
     ],
 )
