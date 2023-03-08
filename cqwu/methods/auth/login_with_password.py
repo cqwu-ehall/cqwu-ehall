@@ -37,7 +37,9 @@ class LoginWithPassword:
         }
         # 是否需要验证码
         if not captcha_code:
-            form_data['captchaResponse'] = await self.check_captcha(show_qrcode=show_qrcode)
+            captcha_code = await self.check_captcha(show_qrcode=show_qrcode)
+            if captcha_code:
+                form_data['captchaResponse'] = captcha_code
         # 登录
         headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
