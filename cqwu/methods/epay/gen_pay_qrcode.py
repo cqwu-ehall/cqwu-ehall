@@ -2,6 +2,7 @@ import qrcode
 from bs4 import BeautifulSoup
 
 import cqwu
+from cqwu.errors.auth import CookieError
 
 
 class GenPayQrcode:
@@ -11,9 +12,12 @@ class GenPayQrcode:
         """
         生成支付二维码
         """
-        html = await self.oauth("http://218.194.176.214:8382/epay/thirdconsume/qrcode")
+        url = "http://218.194.176.214:8382/epay/thirdconsume/qrcode"
+        html = await self.oauth(url)
         if not html:
-            return
+            raise CookieError()
+        if html.url != url:
+            raise CookieError()
         soup = BeautifulSoup(html.text, "lxml")
         try:
             data = soup.find("input", attrs={"id": "myText"})["value"]

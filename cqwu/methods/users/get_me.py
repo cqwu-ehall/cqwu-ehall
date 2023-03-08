@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 import cqwu
 from cqwu import types
+from cqwu.errors.auth import CookieError
 
 
 def get_value_from_soup(soup: BeautifulSoup, attr_id: str) -> Union[type(None), str, int]:
@@ -26,10 +27,14 @@ class GetMe:
         Returns:
             types.User: 个人信息
         """
-        html = await self.oauth(
-            "http://218.194.176.8/prizepunishnv/studentInfoManageStudentNV!forwardStudentInfo.action")
+        url = "http://218.194.176.8/prizepunishnv/studentInfoManageStudentNV!forwardStudentInfo.action"
+        html = await self.oauth(url)
         if not html:
-            return None
+            raise CookieError()
+        if html.url != url:
+            html = await self.request.get(url)
+        if html.url != url:
+            raise CookieError()
         soup = BeautifulSoup(html.text, "lxml")
         data = {
             "username": "detail_xh",

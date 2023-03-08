@@ -2,6 +2,7 @@ from typing import Optional
 from bs4 import BeautifulSoup
 
 import cqwu
+from cqwu.errors.auth import CookieError
 
 
 class GetBalance:
@@ -14,9 +15,12 @@ class GetBalance:
         Returns:
             str: 余额
         """
-        html = await self.oauth("http://218.194.176.214:8382/epay/thirdapp/balance")
+        url = "http://218.194.176.214:8382/epay/thirdapp/balance"
+        html = await self.oauth(url)
         if not html:
-            return ""
+            raise CookieError()
+        if html.url != url:
+            raise CookieError()
         soup = BeautifulSoup(html.text, "lxml")
         try:
             return soup.find_all("div", "weui-cell__ft")[2].next

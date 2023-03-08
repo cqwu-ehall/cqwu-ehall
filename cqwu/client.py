@@ -1,7 +1,6 @@
 import asyncio
 from typing import Coroutine, Optional
 from httpx import AsyncClient, Cookies
-from urllib.parse import urlparse
 
 from cqwu.methods import Methods
 from cqwu.types import User
@@ -28,19 +27,8 @@ class Client(Methods):
         else:
             self.host = "http://ehall.cqwu.edu.cn"
             self.auth_host = "http://authserver.cqwu.edu.cn"
-
-        self.headers = {
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-            "Accept-Encoding": "gzip, deflate",
-            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-            "Host": urlparse(self.host).netloc,
-            "Origin": self.host,
-            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"
-        }
         self.cookies = Cookies()
-        self.sub_cookies = Cookies()
-        self.init_sub_web = []
-        self.request = AsyncClient
+        self.request = AsyncClient()
         self.loop = asyncio.get_event_loop()
         self.me: Optional[User] = None
 
