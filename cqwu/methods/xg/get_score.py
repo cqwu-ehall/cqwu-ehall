@@ -9,8 +9,8 @@ from cqwu.errors.auth import CookieError
 class GetScore:
     async def get_score(
             self: "cqwu.Client",
-            year: int = 2022,
-            semester: int = 1,
+            year: int = None,
+            semester: int = None,
     ) -> List["types.Score"]:
         """
         获取期末成绩
@@ -18,6 +18,8 @@ class GetScore:
         Returns:
             List[types.Score]: 成绩列表
         """
+        year = year or self.xue_nian
+        semester = semester or self.xue_qi
         url = "http://xg.cqwu.edu.cn/xsfw/sys/zhcptybbapp/*default/index.do#/cjcx"
         html = await self.oauth(url)
         if not html:
