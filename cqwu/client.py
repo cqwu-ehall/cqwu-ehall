@@ -15,22 +15,21 @@ class Client(Methods):
         password: str = None,
         cookie: str = None,
         cookie_file_path: str = "cookie.txt",
-        client_vpn: bool = False,
     ):
         self.username = username
         self.password = password
         self.cookie = cookie
         self.cookie_file_path = cookie_file_path
-        if client_vpn:
-            self.host = "https://clientvpn.cqwu.edu.cn:10443/http/webvpn507e990968de07079b0f10d16c49bdb1cb8d3ca3a4d14f557999e92cbdf19fcd"
-            self.auth_host = self.host
-        else:
-            self.host = "http://ehall.cqwu.edu.cn"
-            self.auth_host = "http://authserver.cqwu.edu.cn"
+        self.host = "http://ehall.cqwu.edu.cn"
+        self.auth_host = "http://authserver.cqwu.edu.cn"
+        self.web_ehall_path = ""
         self.cookies = Cookies()
         self.request = AsyncClient()
         self.loop = asyncio.get_event_loop()
         self.me: Optional[User] = None
+        self._use_password_login = False
+        self.xue_nian = 2022  # 学年
+        self.xue_qi = 1  # 学期 0 为第一学期， 1 为第二学期
 
     @staticmethod
     def get_input(word: str = "", is_int: bool = False):
