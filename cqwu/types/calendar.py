@@ -14,7 +14,7 @@ class AiCourse(BaseModel):
 
     @property
     def key(self):
-        return f"{','.join([str(i) for i in self.weeks])}_{self.day}_{self.sections}"
+        return f"{','.join([str(i) for i in self.weeks])}_{self.day}_{self.start_num}"
 
     @property
     def second_key(self):
