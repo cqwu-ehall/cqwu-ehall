@@ -1,6 +1,11 @@
 import base64
+from typing import Tuple, List, Union
+
+from bs4 import BeautifulSoup
+
 import cqwu
 from cqwu.errors import CookieError
+from cqwu.types.calendar import AiCourse
 
 
 class GetCalendar:
@@ -8,7 +13,8 @@ class GetCalendar:
         self: "cqwu.Client",
         xue_nian: int = None,
         xue_qi: int = None,
-    ) -> str:
+        use_model: bool = False,
+    ) -> Union[str, List[AiCourse]]:
         """ 获取课程表 """
         xue_nian = xue_nian or self.xue_nian
         xue_qi = xue_qi or self.xue_qi
@@ -39,4 +45,72 @@ class GetCalendar:
         }
         jw_html = await self.request.get(jw_url, params=params, headers=headers, timeout=60, follow_redirects=True)
         jw_html = jw_html.text.replace("""<script type="text/javascript" src="//clientvpn.cqwu.edu.cn/webvpn/bundle.debug.js" charset="utf-8"></script>""", "")
-        return jw_html.replace("<title></title>", '<meta charset="UTF-8">')
+        return (
+            parse_courses(jw_html)
+            if use_model
+            else jw_html.replace("<title></title>", '<meta charset="UTF-8">')
+        )
+
+
+def parse_courses(jw_html: str) -> List[AiCourse]:
+    courses = []
+    courses_keys = []
+    soup = BeautifulSoup(jw_html, "lxml")
+    trs = [i for i in soup.find_all("tr") if i.find("td", {"class": "td"})][:9]
+    for tr in trs:
+        tds = tr.find_all("td")[2:]
+        for index, td in enumerate(tds):
+            divs = td.find_all("div")
+            for div in divs:
+                class_property = str(div).split("<br/>")
+                if len(class_property) != 4:
+                    continue
+                try:
+                    weeks, start_num, sections = parse_weeks_and_sections(
+                        BeautifulSoup(class_property[2], "lxml").text.strip()
+                    )
+                except Exception:
+                    continue
+                item = AiCourse(
+                    name=BeautifulSoup(class_property[0], "lxml").text.strip(),
+                    teacher=BeautifulSoup(class_property[1], "lxml").text.strip(),
+                    position=BeautifulSoup(class_property[3], "lxml").text.strip(),
+                    weeks=weeks,
+                    day=index + 1,
+                    start_num=start_num,
+                    sections=sections,
+                )
+                if item.key not in courses_keys:
+                    courses_keys.append(item.key)
+                    courses.append(item)
+    return courses
+
+
+def parse_weeks_and_sections(text: str) -> Tuple[List[int], int, int]:
+    # text: 17[1-4],1-18 单 [傍晚1]
+    weeks_list, start_num, sections = [], 0, 0
+    for week1 in text.split("[")[0].split(","):
+        if "-" in week1:
+            dan, shuang = "单" in week1, "双" in week1
+            week1 = week1.replace("单", "").replace("双", "")
+            for week in range(int(week1.split("-")[0]), int(week1.split("-")[1]) + 1):
+                if dan:
+                    if week % 2 != 0:
+                        weeks_list.append(week)
+                elif shuang:
+                    if week % 2 == 0:
+                        weeks_list.append(week)
+                else:
+                    weeks_list.append(week)
+        else:
+            weeks_list.append(int(week1))
+
+    section_range = text.split("[")[1].replace("]", "")
+    if section_range.startswith("傍晚"):
+        start_num = 9
+        sections = 1
+    else:
+        start_num = int(section_range.split("-")[0])
+        end = int(section_range.split("-")[1])
+        sections = end - start_num + 1
+    return weeks_list, start_num, sections
