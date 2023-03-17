@@ -58,7 +58,7 @@ def parse_courses(jw_html: str) -> List[AiCourse]:
     soup = BeautifulSoup(jw_html, "lxml")
     trs = [i for i in soup.find_all("tr") if i.find("td", {"class": "td"})][:9]
     for tr in trs:
-        tds = tr.find_all("td")[2:]
+        tds = tr.find_all("td", {"class": "td"})
         for index, td in enumerate(tds):
             divs = td.find_all("div")
             for div in divs:
