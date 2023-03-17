@@ -6,11 +6,11 @@ class AuthError(CQWUEhallError):
 
 
 class UsernameOrPasswordError(AuthError):
-    pass
+    """ 用户名或密码错误 """
 
 
 class CookieError(AuthError):
-    pass
+    """ Cookie 失效 """
 
 
 class NeedCaptchaError(AuthError):

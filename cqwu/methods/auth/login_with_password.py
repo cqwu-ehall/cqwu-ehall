@@ -27,7 +27,13 @@ class LoginWithPassword:
         html = await self.request.get(f"{auth_host}/authserver/login", headers=headers, follow_redirects=True)
         self.cookies.update(html.cookies)
         tree = etree.HTML(html.text)
-        pwd_default_encrypt_salt = tree.xpath('//*[@id="pwdDefaultEncryptSalt"]/@value')[0]
+        try:
+            pwd_default_encrypt_salt = tree.xpath('//*[@id="pwdDefaultEncryptSalt"]/@value')[0]
+        except IndexError:
+            if auth_host == self.auth_host:
+                self._use_password_login = True  # noqa
+                self.me = await self.get_me()  # noqa
+            return
         form_data = {
             'username': str(self.username),
             'password': encode_password(self.password, pwd_default_encrypt_salt),
