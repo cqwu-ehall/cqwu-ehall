@@ -109,8 +109,11 @@ def parse_weeks_and_sections(text: str) -> Tuple[List[int], int, int]:
     if section_range.startswith("傍晚"):
         start_num = 9
         sections = 1
-    else:
+    elif "-" in section_range:
         start_num = int(section_range.split("-")[0])
         end = int(section_range.split("-")[1])
         sections = end - start_num + 1
+    else:
+        start_num = int(section_range)
+        sections = 1
     return weeks_list, start_num, sections
