@@ -5,3 +5,4 @@ beautifulsoup4==4.11.2
 qrcode==7.4.2
 pillow
 pydantic==1.10.5
+openpyxl
