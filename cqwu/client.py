@@ -15,6 +15,7 @@ class Client(Methods):
         password: str = None,
         cookie: str = None,
         cookie_file_path: str = "cookie.txt",
+        timeout: int = 10,
     ):
         self.username = username
         self.password = password
@@ -24,7 +25,7 @@ class Client(Methods):
         self.auth_host = "http://authserver.cqwu.edu.cn"
         self.web_ehall_path = ""
         self.cookies = Cookies()
-        self.request = AsyncClient()
+        self.request = AsyncClient(timeout=timeout)
         self.loop = asyncio.get_event_loop()
         self.me: Optional[User] = None
         self._use_password_login = False
