@@ -1,9 +1,7 @@
-import json
 from typing import List
 
 import cqwu
 from cqwu import types
-from cqwu.errors.auth import CookieError
 
 
 class GetScore:
@@ -20,14 +18,7 @@ class GetScore:
         """
         year = year or self.xue_nian
         semester = semester or self.xue_qi
-        url = "http://xg.cqwu.edu.cn/xsfw/sys/zhcptybbapp/*default/index.do#/cjcx"
-        html = await self.oauth(url)
-        if not html:
-            raise CookieError()
-        if html.url != url:
-            raise CookieError()
-        await self.request.get(
-            "http://xg.cqwu.edu.cn/xsfw/sys/swpubapp/indexmenu/getAppConfig.do?appId=5275772372599202&appName=zhcptybbapp&v=046351851777942055")
+        await self.oauth_xg()
         query_url = "http://xg.cqwu.edu.cn/xsfw/sys/zhcptybbapp/modules/cjcx/cjcxbgdz.do"
         headers = {
             'Accept': 'application/json, text/javascript, */*; q=0.01',
