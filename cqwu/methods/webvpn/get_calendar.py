@@ -4,7 +4,6 @@ from typing import Tuple, List, Union
 from bs4 import BeautifulSoup
 
 import cqwu
-from cqwu.errors import CookieError
 from cqwu.types.calendar import AiCourse
 
 
@@ -18,11 +17,7 @@ class GetCalendar:
         """ 获取课程表 """
         xue_nian = xue_nian or self.xue_nian
         xue_qi = xue_qi or self.xue_qi
-        jw_html = await self.request.get(
-            f"{self.web_ehall_path}/appShow?appId=5299144291521305", follow_redirects=True
-        )
-        if "教学管理服务平台" not in jw_html.text:
-            raise CookieError
+        jw_html = await self.login_jwmis()
         jw_host = self.get_web_vpn_host(jw_html.url)
         jw_url = f"{jw_host}/cqwljw/student/wsxk.xskcb10319.jsp"
         params = {

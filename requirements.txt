@@ -1,7 +1,7 @@
-httpx==0.23.3
+httpx==0.24.1
 lxml==4.9.2
 PyExecJS2==1.6.1
-beautifulsoup4==4.11.2
+beautifulsoup4==4.12.2
 qrcode==7.4.2
 pillow
 pydantic==1.10.5

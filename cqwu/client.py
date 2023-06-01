@@ -29,8 +29,10 @@ class Client(Methods):
         self.loop = asyncio.get_event_loop()
         self.me: Optional[User] = None
         self._use_password_login = False
-        self.xue_nian = 2022  # 学年
-        self.xue_qi = 1  # 学期 0 为第一学期， 1 为第二学期
+        self.xue_nian = 2022
+        """ 学年 """
+        self.xue_qi = 1
+        """ 学期，0 为第一学期，1 为第二学期 """
 
     @staticmethod
     def get_input(word: str = "", is_int: bool = False):

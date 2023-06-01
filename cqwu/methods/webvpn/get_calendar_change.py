@@ -1,5 +1,4 @@
 import cqwu
-from cqwu.errors import CookieError
 
 
 def get_in_middle(text: str, start: str, end: str) -> str:
@@ -15,11 +14,7 @@ class GetCalendarChange:
         """ 获取课程表 """
         xue_nian = xue_nian or self.xue_nian
         xue_qi = xue_qi or self.xue_qi
-        jw_html = await self.request.get(
-            f"{self.web_ehall_path}/appShow?appId=5299144291521305", follow_redirects=True
-        )
-        if "教学管理服务平台" not in jw_html.text:
-            raise CookieError
+        jw_html = await self.login_jwmis()
         jw_host = self.get_web_vpn_host(jw_html.url, https=True)
         jw_url = f"{jw_host}/cqwljw/student/jxap.jxaptzxx_rpt.jsp"
         jw_sg_url = f"{jw_host}/cqwljw/STU_DynamicInitDataAction.do"
