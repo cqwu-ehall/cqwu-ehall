@@ -25,6 +25,11 @@ class AiExam(BaseModel):
         """ 获取课程名称(去除课程编号) """
         return self.name.split("]")[-1]
 
+    @property
+    def days_left(self) -> int:
+        """ 获取距离考试的天数 """
+        return (self.get_time()[0] - datetime.datetime.now()).days
+
     def get_time(self) -> Tuple[datetime.datetime, datetime.datetime]:
         """ 获取格式化后的考试时间 """
         # 2023-06-25(18周 星期日)09:00-11:00
