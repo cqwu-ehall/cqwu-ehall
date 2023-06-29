@@ -1,3 +1,4 @@
+import json
 from typing import List
 
 import cqwu
@@ -17,7 +18,7 @@ class GetScore:
             List[types.Score]: 成绩列表
         """
         year = year or self.xue_nian
-        semester = semester or self.xue_qi
+        semester = semester or (self.xue_qi + 1)
         await self.oauth_xg()
         query_url = "http://xg.cqwu.edu.cn/xsfw/sys/zhcptybbapp/modules/cjcx/cjcxbgdz.do"
         headers = {
