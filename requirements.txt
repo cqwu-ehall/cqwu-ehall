@@ -1,5 +1,5 @@
 httpx==0.24.1
-lxml==4.9.2
+lxml==4.9.3
 PyExecJS2==1.6.1
 beautifulsoup4==4.12.2
 qrcode==7.4.2
