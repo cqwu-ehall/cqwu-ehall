@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from pydantic import BaseModel
@@ -8,7 +9,7 @@ class PayBill(BaseModel):
     amount: float
     tradename: str
     shopname: str
-    paytime: int
+    paytime: datetime
     status: int
 
 
