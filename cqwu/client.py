@@ -22,7 +22,7 @@ class Client(Methods):
         self.cookie = cookie
         self.cookie_file_path = cookie_file_path
         self.host = "http://ehall.cqwu.edu.cn"
-        self.auth_host = "http://authserver.cqwu.edu.cn"
+        self.auth_host = "https://authserver.cqwu.edu.cn"
         self.web_ehall_path = ""
         self.cookies = Cookies()
         self.request = AsyncClient(timeout=timeout)
