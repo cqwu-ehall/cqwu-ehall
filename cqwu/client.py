@@ -15,7 +15,7 @@ class Client(Methods):
         password: str = None,
         cookie: str = None,
         cookie_file_path: str = "cookie.txt",
-        timeout: int = 10,
+        timeout: int = 60,
     ):
         self.username = username
         self.password = password
