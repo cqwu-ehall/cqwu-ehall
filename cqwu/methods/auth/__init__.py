@@ -14,6 +14,6 @@ class Auth(
     LoginWithCookie,
     LoginWithCookieFile,
     LoginWithPassword,
-    Oauth
+    Oauth,
 ):
     pass

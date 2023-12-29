@@ -19,7 +19,10 @@ class Pay(
         html = await self.request.get(url, follow_redirects=False)
         if html.status_code == 302:
             location = html.headers["location"]
-            params = {i.split("=")[0]: i.split("=")[1] for i in location.split("?")[1].split("&")}
+            params = {
+                i.split("=")[0]: i.split("=")[1]
+                for i in location.split("?")[1].split("&")
+            }
             self._pay_x_token = params["token"]
 
     @property

@@ -29,5 +29,11 @@ class AiCourse(BaseModel):
             "weeks": ",".join(list(map(str, self.weeks))),
             "day": self.day,
             "style": "",
-            "sections": ",".join(list(map(str, list(range(self.start_num, self.start_num + self.sections)))))
+            "sections": ",".join(
+                list(
+                    map(
+                        str, list(range(self.start_num, self.start_num + self.sections))
+                    )
+                )
+            ),
         }

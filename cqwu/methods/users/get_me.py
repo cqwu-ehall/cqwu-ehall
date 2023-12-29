@@ -6,7 +6,9 @@ from cqwu import types
 from cqwu.errors.auth import CookieError
 
 
-def get_value_from_soup(soup: BeautifulSoup, attr_id: str) -> Union[type(None), str, int]:
+def get_value_from_soup(
+    soup: BeautifulSoup, attr_id: str
+) -> Union[type(None), str, int]:
     try:
         data = soup.find("input", attrs={"id": attr_id})["value"]
         try:
@@ -53,7 +55,9 @@ class GetMe:
         temp = {key: get_value_from_soup(soup, value) for key, value in data.items()}
         temp["password"] = self.password
         try:
-            temp["specialty"] = soup.find_all("input", attrs={"id": "detail_xy"})[1]["value"]
+            temp["specialty"] = soup.find_all("input", attrs={"id": "detail_xy"})[1][
+                "value"
+            ]
         except (ValueError, TypeError, KeyError, IndexError):
             temp["specialty"] = None
         return types.User(**temp)

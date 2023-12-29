@@ -3,6 +3,7 @@ from httpx import URL
 from .get_calendar import GetCalendar
 from .get_calendar_change import GetCalendarChange
 from .get_exam_calendar import GetExamCalendar
+from .get_exam_calendar_action import GetExamCalendarAction
 from .get_score_detail import GetScoreDetail
 from .get_selected_courses import GetSelectedCourses
 from .login_jwmis import LoginJwmis
@@ -13,6 +14,7 @@ class WebVPN(
     GetCalendar,
     GetCalendarChange,
     GetExamCalendar,
+    GetExamCalendarAction,
     GetScoreDetail,
     GetSelectedCourses,
     LoginJwmis,

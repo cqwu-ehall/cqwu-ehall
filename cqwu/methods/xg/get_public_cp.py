@@ -12,25 +12,27 @@ class GetPublicCP:
         page_number: int = 1,
         total: bool = True,
     ) -> List[PublicCPRaw]:
-        """ 获取综合测评公示结果 """
+        """获取综合测评公示结果"""
         await self.oauth_xg()
 
         async def get_public_cp_raw(page_size_: int, page_number_: int) -> CPGS:
-            url = "http://xg.cqwu.edu.cn/xsfw/sys/zhcptybbapp/modules/cpgs/cpgs_cpgsbg.do"
+            url = (
+                "http://xg.cqwu.edu.cn/xsfw/sys/zhcptybbapp/modules/cpgs/cpgs_cpgsbg.do"
+            )
             headers = {
-                'Accept': 'application/json, text/javascript, */*; q=0.01',
-                'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,hu;q=0.5',
-                'Connection': 'keep-alive',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'Origin': 'http://xg.cqwu.edu.cn',
-                'Referer': 'http://xg.cqwu.edu.cn/xsfw/sys/zhcptybbapp/*default/index.do',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.51',
-                'X-Requested-With': 'XMLHttpRequest',
+                "Accept": "application/json, text/javascript, */*; q=0.01",
+                "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,hu;q=0.5",
+                "Connection": "keep-alive",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "Origin": "http://xg.cqwu.edu.cn",
+                "Referer": "http://xg.cqwu.edu.cn/xsfw/sys/zhcptybbapp/*default/index.do",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.51",
+                "X-Requested-With": "XMLHttpRequest",
             }
             data = {
-                'querySetting': '[]',
-                'pageSize': str(page_size_),
-                'pageNumber': str(page_number_),
+                "querySetting": "[]",
+                "pageSize": str(page_size_),
+                "pageNumber": str(page_number_),
             }
             html = await self.request.post(url, headers=headers, data=data)
             if html.status_code != 200:
@@ -59,7 +61,10 @@ class GetPublicCP:
                 return_datas.extend(html_raw_datas.rows)
                 if html_raw_datas.totalSize == 0:
                     break
-                elif html_raw_datas.pageNumber * html_raw_datas.pageSize >= html_raw_datas.totalSize:
+                elif (
+                    html_raw_datas.pageNumber * html_raw_datas.pageSize
+                    >= html_raw_datas.totalSize
+                ):
                     break
                 else:
                     page_number += 1

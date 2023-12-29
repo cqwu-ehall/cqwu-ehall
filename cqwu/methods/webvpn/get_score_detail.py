@@ -16,7 +16,7 @@ class GetScoreDetail:
         xue_qi: int = None,
         use_model: bool = False,
     ) -> Union[str, ScoreDetail]:
-        """ 获取学业成绩 """
+        """获取学业成绩"""
         xue_nian = xue_nian or self.xue_nian
         xue_qi = xue_qi or self.xue_qi
         search_type = ScoreSearchType(search_type)
@@ -24,23 +24,23 @@ class GetScoreDetail:
         jw_host = self.get_web_vpn_host(jw_html.url, https=True)
         jw_url = f"{jw_host}/cqwljw/student/xscj.stuckcj_data.jsp"
         headers = {
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'Accept-Language': 'zh-CN,zh;q=0.9,zh-Hans;q=0.8,und;q=0.7,en;q=0.6,zh-Hant;q=0.5,ja;q=0.4',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'DNT': '1',
-            'Pragma': 'no-cache',
-            'Referer': f'{jw_host}/cqwljw/student/ksap.ksapb.html?menucode=S20403',
-            'Sec-Fetch-Dest': 'iframe',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'same-origin',
-            'Sec-Fetch-User': '?1',
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-            'sec-ch-ua': '"Chromium";v="112", "Not:A-Brand";v="99"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "Accept-Language": "zh-CN,zh;q=0.9,zh-Hans;q=0.8,und;q=0.7,en;q=0.6,zh-Hant;q=0.5,ja;q=0.4",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "DNT": "1",
+            "Pragma": "no-cache",
+            "Referer": f"{jw_host}/cqwljw/student/ksap.ksapb.html?menucode=S20403",
+            "Sec-Fetch-Dest": "iframe",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "same-origin",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+            "sec-ch-ua": '"Chromium";v="112", "Not:A-Brand";v="99"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"Windows"',
         }
         data = {
             "sjxz": f"sjxz{search_type.value}",
@@ -50,7 +50,7 @@ class GetScoreDetail:
             "btnExport": "%B5%BC%B3%F6",
             "rxnj": str(xue_nian),
             "xn": str(xue_nian),
-            'xn1': str(xue_nian + 1),
+            "xn1": str(xue_nian + 1),
             "xq": str(xue_qi),
             "ysyxS": "on",
             "sjxzS": "on",
@@ -58,12 +58,20 @@ class GetScoreDetail:
             "fxC": "on",
             "xsjd": "1",
         }
-        jw_html = await self.request.post(jw_url, data=data, headers=headers, timeout=60, follow_redirects=True)
+        jw_html = await self.request.post(
+            jw_url, data=data, headers=headers, timeout=60, follow_redirects=True
+        )
         if "没有检索到记录!" in jw_html.text:
             raise NoScoreDetailData("没有检索到记录!")
-        jw_html = jw_html.text.replace("""<script type="text/javascript" src="//clientvpn.cqwu.edu.cn/webvpn/bundle.debug.js" charset="utf-8"></script>""", "")
-        jw_html = jw_html.replace("""<script language='javascript' type='text/javascript' src='../js/Print.js'></script>""", "")
-        jw_html = jw_html.replace("charset=GBK", 'charset=UTF-8')
+        jw_html = jw_html.text.replace(
+            """<script type="text/javascript" src="//clientvpn.cqwu.edu.cn/webvpn/bundle.debug.js" charset="utf-8"></script>""",
+            "",
+        )
+        jw_html = jw_html.replace(
+            """<script language='javascript' type='text/javascript' src='../js/Print.js'></script>""",
+            "",
+        )
+        jw_html = jw_html.replace("charset=GBK", "charset=UTF-8")
         if not use_model:
             return jw_html
         return parse_html(jw_html)

@@ -22,6 +22,6 @@ class GetPayBill:
             raise CookieError()
         data = await self.request.post(
             "http://218.194.176.214:8382/epay/thirdapp/loadbill.json",
-            data={"pageno": page_number}
+            data={"pageno": page_number},
         )
         return PayBillPage(**data.json())

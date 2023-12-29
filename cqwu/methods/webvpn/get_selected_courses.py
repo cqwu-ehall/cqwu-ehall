@@ -12,27 +12,32 @@ class GetSelectedCourses:
         self: "cqwu.Client",
         use_model: bool = False,
     ) -> Union[str, List[AiCourse]]:
-        """ 获取选课结果 """
+        """获取选课结果"""
         jw_html = await self.login_jwmis()
         jw_host = self.get_web_vpn_host(jw_html.url)
         jw_url = f"{jw_host}/cqwljw/student/wsxk.zxjg.jsp"
         headers = {
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'Accept-Language': 'zh-CN,zh;q=0.9',
-            'Connection': 'keep-alive',
-            'Referer': f'{jw_host}/cqwljw/frame/homes.html',
-            'Sec-Fetch-Dest': 'iframe',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'same-origin',
-            'Sec-Fetch-User': '?1',
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.41',
-            'sec-ch-ua': '"Microsoft Edge";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "Connection": "keep-alive",
+            "Referer": f"{jw_host}/cqwljw/frame/homes.html",
+            "Sec-Fetch-Dest": "iframe",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "same-origin",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.41",
+            "sec-ch-ua": '"Microsoft Edge";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"Windows"',
         }
-        jw_html = await self.request.get(jw_url, headers=headers, timeout=60, follow_redirects=True)
-        jw_html = jw_html.text.replace("""<script type="text/javascript" src="//clientvpn.cqwu.edu.cn/webvpn/bundle.debug.js" charset="utf-8"></script>""", "")
+        jw_html = await self.request.get(
+            jw_url, headers=headers, timeout=60, follow_redirects=True
+        )
+        jw_html = jw_html.text.replace(
+            """<script type="text/javascript" src="//clientvpn.cqwu.edu.cn/webvpn/bundle.debug.js" charset="utf-8"></script>""",
+            "",
+        )
         return (
             parse_courses(jw_html)
             if use_model
@@ -57,7 +62,9 @@ def parse_courses(jw_html: str) -> List[AiCourse]:
         for calendar in calendars:
             text = (BeautifulSoup(calendar, "lxml")).text.strip()
             try:
-                position, weeks, day, start_num, sections = parse_weeks_and_sections(text)
+                position, weeks, day, start_num, sections = parse_weeks_and_sections(
+                    text
+                )
             except Exception:
                 continue
             item = AiCourse(

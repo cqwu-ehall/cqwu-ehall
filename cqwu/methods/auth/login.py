@@ -9,7 +9,7 @@ class Login:
     async def login(
         self: "cqwu.Client",
     ):
-        """ 登录 """
+        """登录"""
         with contextlib.suppress(CookieError):
             if self.cookie:
                 await self.login_with_cookie()

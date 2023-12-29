@@ -18,8 +18,10 @@ class GetPayProjectDetail:
         """
         if not self._pay_x_token:
             await self._oauth_pay()
-        url = (f"https://pay.cqwu.edu.cn/api/pay/web/tuitionAndDorm/getTuitionAndDormList/"
-               f"{self.username}/{project_id}")
+        url = (
+            f"https://pay.cqwu.edu.cn/api/pay/web/tuitionAndDorm/getTuitionAndDormList/"
+            f"{self.username}/{project_id}"
+        )
         html = await self.request.get(url, headers=self.pay_headers)
         if html.status_code != 200:
             raise CookieError()
