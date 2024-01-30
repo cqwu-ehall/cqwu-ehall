@@ -14,6 +14,7 @@ class GetScoreDetail:
         search_type: Union[str, ScoreSearchType] = ScoreSearchType.XUEQI,
         xue_nian: int = None,
         xue_qi: int = None,
+        origin: bool = False,
         use_model: bool = False,
     ) -> Union[str, ScoreDetail]:
         """获取学业成绩"""
@@ -44,7 +45,7 @@ class GetScoreDetail:
         }
         data = {
             "sjxz": f"sjxz{search_type.value}",
-            "ysyx": "yxcj",
+            "ysyx": "yscj" if origin else "yxcj",
             "zx": "1",
             "fx": "1",
             "btnExport": "%B5%BC%B3%F6",
@@ -74,7 +75,7 @@ class GetScoreDetail:
         jw_html = jw_html.replace("charset=GBK", "charset=UTF-8")
         if not use_model:
             return jw_html
-        return parse_html(jw_html)
+        return parse_html(jw_html, origin)
 
 
 def parse_info(tag: Tag) -> ScoreDetailInfo:
@@ -117,6 +118,26 @@ def parse_course(tag: Tag) -> List[ScoreDetailCourse]:
     return courses
 
 
+def parse_course_origin(tag: Tag) -> List[ScoreDetailCourse]:
+    trs = tag.find_all("tr")
+    courses = []
+    for tr in trs:
+        tds = tr.find_all("td")
+        course = ScoreDetailCourse(
+            id=tds[0].text,
+            name=tds[1].text,
+            credit=tds[2].text,
+            period=tds[3].text,
+            type=tds[4].text,
+            nature=tds[5].text,
+            exam_method=tds[6].text,
+            score=tds[8].text,
+            remark=tds[9].text,
+        )
+        courses.append(course)
+    return courses
+
+
 def parse_total(tag: Tag) -> ScoreDetailTotal:
     tr = tag.find_all("tr")[-1]
     tds = tr.find_all("td")
@@ -132,13 +153,17 @@ def parse_total(tag: Tag) -> ScoreDetailTotal:
     )
 
 
-def parse_html(html: str) -> ScoreDetail:
+def parse_html(html: str, origin: bool) -> ScoreDetail:
     soup = BeautifulSoup(html, "lxml")
     group_div = soup.find("div", {"group": "group"})
     info = parse_info(group_div)
     tbody_s = soup.find_all("tbody")
     courses = []
-    for tbody in tbody_s[:-1]:
-        courses += parse_course(tbody)
-    total = parse_total(tbody_s[-1])
+    total = None
+    if origin:
+        courses += parse_course_origin(tbody_s[0])
+    else:
+        for tbody in tbody_s[:-1]:
+            courses += parse_course(tbody)
+        total = parse_total(tbody_s[-1])
     return ScoreDetail(info=info, courses=courses, total=total)

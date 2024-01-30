@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -71,5 +71,5 @@ class ScoreDetail(BaseModel):
     """基本信息"""
     courses: List[ScoreDetailCourse]
     """课程信息"""
-    total: ScoreDetailTotal
+    total: Optional[ScoreDetailTotal] = None
     """总计"""
