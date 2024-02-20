@@ -31,7 +31,7 @@ class Client(Methods):
         self._use_password_login = False
         self.xue_nian = 2023
         """ 学年 """
-        self.xue_qi = 0
+        self.xue_qi = 1
         """ 学期，0 为第一学期，1 为第二学期 """
         self._pay_x_token = ""
 
